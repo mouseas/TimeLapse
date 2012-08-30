@@ -1,0 +1,61 @@
+Time Lapse controller - take a picture at set intervals.
+
+bool cameraOn
+char interval
+bool mode (SECONDS = 0, MINUTES = 1)
+unsigned int timeCounter
+#define on/off threshold
+
+char sysevent (0x0001 check time settings, 0x0002 1 second, 0x0004 take picture
+	0x0008 turn camera on, 0x0010 turn camera off
+
+
+void readIntervalSettings() {
+	interval = 1
+	for each switch on the 8-pin DIP switch set,
+	add its value to interval
+	if SW8, mode = 1, else mode = 0 
+}
+
+main() {
+
+init stuff
+
+while(1) {
+	if check time settings
+		readIntervalSettings()
+	if 1 second
+		reset 1 second counter
+		if mode == SECOND
+			increment timeCounter
+		else if mode == MINUTE
+			increment minuteCounter
+			if minuteCounter >= 60
+				minutecounter -= 60
+				increment timeCounter
+	if take picture
+		turn on pic/video pin
+		wait 50 milliseconds
+		turn off pic/video pin
+	if turn camera on (or off)
+		turn on on/off pin
+		wait long enough
+		turn off on/off pin
+}
+}
+
+timer ISR() {
+	if 1 second has passed, sysevent &= 1 second
+	if timeCounter > interval
+		sysevent &= take picture
+	if mode = MINUTE && timeCounter > interval - on/off threshold
+		sysevent &= turn camera on
+	if mode = MINUTE && timerCounter < on/off threshold
+		sysevent &= turn camera off
+	 
+
+}
+
+SW9 ISR() {
+	check time settings = true
+}
