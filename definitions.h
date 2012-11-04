@@ -23,8 +23,11 @@ typedef unsigned long uint32;
 #define WDT_CTL WDT_MDLY_32			// WDT control; 32 Khz, delay mode, SMCLK
 #define WDT_IPS MY_CLOCK/WDT_CLOCK	// Interrupts per second
 
+#define SEC_PER_MIN	60				// 60 seconds in a minute
+
 #define DEBOUNCE_CNT 20				// 20 watchdog cycles to debounce a switch.
 #define ON_OFF_THRESHOLD 5			// 5 seconds before taking a picture, turn the camera on.
+#define TAKE_PIC_THRESHOLD 3		// 3 cycles before 0:0:0, turn on the picture transistor. Turn it off at 0:0:0.
 
 // P1.0-1.7
 #define sw1 0x01
@@ -36,14 +39,19 @@ typedef unsigned long uint32;
 #define takePicButton 0x40
 #define onOffButton 0x80
 
-#define sw1to6 sw1 | sw2 | sw3 | sw4 | sw5 | sw6
+#define sw1to6 (sw1 | sw2 | sw3 | sw4 | sw5 | sw6)
+// Possible solution to the switch reading problem:
+// http://stackoverflow.com/questions/12225020/msp430-how-do-i-read-a-grounded-i-o-pin
 
 //P2.0-2.2
 #define sw7 0x01
 #define sw8 0x02
 #define sw9 0x04					// interrupt button
+#define debug1	0x08				// used while debugging; these are output LEDs.
+#define debug2	0x10				// Any code using these pins can be
+#define debug3	0x20				// disabled on the final product.
 
-#define sw7to8 sw7 | sw8
+#define sw7to8 (sw7 | sw8)
 
 //****************************************************************
 // System Event definitions
@@ -58,6 +66,8 @@ volatile uint16 sysEvent;			// event register
 #define turnCameraOffStart	0x0020
 #define turnCameraOffEnd	0x0040
 #define doButtons			0x0080
+#define shutDown			0x0100
+#define startUp				0x0200
 
 volatile char switchesP1;			// P1 switches state
 volatile char switchesP2;			// p2 switches state

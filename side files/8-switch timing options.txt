@@ -1,0 +1,26 @@
+Base of 1 second delay between exposures (for 0000 0000)
+0000 0001 +1 sec 0x01
+0000 0010 +2 sec 0x02
+0000 0100 +4 sec 0x04
+0000 1000 +8 sec 0x08
+0001 0000 +16 sec 0x10
+0010 0000 +32 sec 0x20
+0100 0000 +64 sec 0x40
+1000 0000 minutes instead of seconds 0x80
+(1000 0000 means 1 minute delay between exposures)
+1011 1100 is 1 exposure/hour.
+0011 1100 is 1 exposure/min, but so is 1000 0000.
+
+Px.0 - 0x01
+Px.1 - 0x02
+Px.2 - 0x04
+Px.3 - 0x08
+Px.4 - 0x10
+Px.5 - 0x20
+Px.6 - 0x40
+Px.7 - 0x80
+
+
+
+
+
